@@ -21,6 +21,7 @@ public:
 
 int main()
 {
+	//решение с текстурой
 	{Framework framework;
 
 	Textures* render = new Textures();
@@ -32,7 +33,7 @@ int main()
 	framework.Run();
 
 	framework.Close(); }
-
+	// решение со светом
 	/*{Framework framework;
 
 	Light* render = new Light();
