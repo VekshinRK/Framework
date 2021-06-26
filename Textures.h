@@ -15,6 +15,7 @@ public:
 	bool Init(HWND hwnd);
 	bool Draw();
 	void Close();
+	void SolarSystem();
 
 	void* operator new(size_t i)
 	{
@@ -39,8 +40,18 @@ private:
 
 	DirectX::XMMATRIX m_World1;
 	DirectX::XMMATRIX m_World2;
+	DirectX::XMMATRIX m_World_sputnik;
 	DirectX::XMMATRIX m_View;
 	DirectX::XMMATRIX m_Projection;
 
 	float m_rot;
+	float m_rot1;
+	float m_rot2;
+	float m_rot3;
+	float m_rot4;
+	float m_rot5;
+	float m_rot_sputnik;
+	float m_rot_sputnik1;
+	float m_rot_sputnik2;
 };
+

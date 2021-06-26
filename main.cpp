@@ -22,7 +22,7 @@ public:
 int main()
 {
 	//решение с текстурой
-	{Framework framework;
+	/*{Framework framework;
 
 	Textures* render = new Textures();
 	FrameworkDesc desc;
@@ -32,9 +32,9 @@ int main()
 
 	framework.Run();
 
-	framework.Close(); }
+	framework.Close(); }*/
 	// решение со светом
-	/*{Framework framework;
+	{Framework framework;
 
 	Light* render = new Light();
 
@@ -45,7 +45,7 @@ int main()
 
 	framework.Run();
 
-	framework.Close(); }*/
+	framework.Close(); }
 
 	system("pause");
 	return 0;

@@ -192,43 +192,15 @@ bool Textures::Init(HWND hwnd)
 	XMVECTOR Up = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
 	m_View = XMMatrixLookAtLH(Eye, At, Up);
 
-	m_Projection = XMMatrixPerspectiveFovLH(0.4f * 3.14f, (float)640 / 480, 0.1f, 1000.0f);
+	m_Projection = XMMatrixPerspectiveFovLH(0.4f * 3.14f, (float)1080 / 960, 0.1f, 10000.0f);
 
 	return true;
 }
 bool Textures::Draw()
 {
-	m_rot += .0005f;
-	if (m_rot > 6.26f)
-		m_rot = 0.0f;
 
-	XMVECTOR rotaxis = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
-	XMMATRIX Rotation = XMMatrixRotationAxis(rotaxis, m_rot);
-	XMMATRIX Translation = XMMatrixTranslation(0.0f, 0.0f, 4.0f);
-
-	m_World1 = Translation * Rotation;
-
-	Rotation = XMMatrixRotationAxis(rotaxis, -m_rot);
-	XMMATRIX Scale = XMMatrixScaling(1.3f, 1.3f, 1.3f);
-
-	m_World2 = Rotation * Scale;
-
-	XMMATRIX WVP = m_World1 * m_View * m_Projection;
-	ConstantBuffer cb;
-	cb.WVP = XMMatrixTranspose(WVP);
-	m_pImmediateContext->UpdateSubresource(m_pConstantBuffer, 0, NULL, &cb, 0, 0);
-
-	m_pImmediateContext->VSSetShader(m_pVertexShader, NULL, 0);
-	m_pImmediateContext->VSSetConstantBuffers(0, 1, &m_pConstantBuffer);
-	m_pImmediateContext->PSSetShader(m_pPixelShader, NULL, 0);
-	m_pImmediateContext->PSSetShaderResources(0, 1, &m_pTextureRV);
-	m_pImmediateContext->PSSetSamplers(0, 1, &m_pSamplerLinear);
-	m_pImmediateContext->DrawIndexed(36, 0, 0);
-
-	WVP = m_World2 * m_View * m_Projection;
-	cb.WVP = XMMatrixTranspose(WVP);
-	m_pImmediateContext->UpdateSubresource(m_pConstantBuffer, 0, NULL, &cb, 0, 0);
-	m_pImmediateContext->DrawIndexed(36, 0, 0);
+	SolarSystem();
+	
 
 	return true;
 }
@@ -243,3 +215,334 @@ void Textures::Close()
 	_RELEASE(m_pTextureRV);
 	_RELEASE(m_pSamplerLinear);
 }
+
+void Textures::SolarSystem()
+{
+
+
+	m_rot += .0005f;
+	if (m_rot > 6.26f)
+		m_rot = 0.0f;
+
+	XMVECTOR rotaxis = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+	XMMATRIX Rotation = XMMatrixRotationAxis(rotaxis, m_rot);
+	XMMATRIX RotationSputnik = XMMatrixRotationAxis(rotaxis, m_rot);
+	XMMATRIX Translation = XMMatrixTranslation(0.0f, 0.0f, 2.0f);
+	XMMATRIX TranslationSputnik = XMMatrixTranslation(0.0f, 0.0f, 2.0f);
+	m_World1 = Translation * Rotation;
+	
+	Rotation = XMMatrixRotationAxis(rotaxis, -m_rot);
+	XMMATRIX Scale = XMMatrixScaling(0.3f, 0.3f, 0.3f);
+	XMMATRIX ScaleSputnik = XMMatrixScaling(0.1f, 0.1f, 0.1f);
+	
+	XMMATRIX WVP = m_World1 * m_View * m_Projection;
+	ConstantBuffer cb;
+	m_World2 = Rotation * Scale;
+	WVP = m_World2 * m_View * m_Projection;
+	cb.WVP = XMMatrixTranspose(WVP);
+	m_pImmediateContext->UpdateSubresource(m_pConstantBuffer, 0, NULL, &cb, 0, 0);
+	m_pImmediateContext->VSSetShader(m_pVertexShader, NULL, 0);
+	m_pImmediateContext->VSSetConstantBuffers(0, 1, &m_pConstantBuffer);
+	m_pImmediateContext->PSSetShader(m_pPixelShader, NULL, 0);
+	m_pImmediateContext->PSSetShaderResources(0, 1, &m_pTextureRV);
+	m_pImmediateContext->PSSetSamplers(0, 1, &m_pSamplerLinear);
+	m_pImmediateContext->DrawIndexed(36, 0, 0);
+	
+
+
+	// 1 спутник
+	Translation = XMMatrixTranslation(0.35f, -0.35, 0.35f);
+	rotaxis = XMVectorSet(0.2f, 0.5f, 0.3f, 0.0f);
+	Rotation = XMMatrixRotationAxis(rotaxis, m_rot);
+	m_World1 = XMMatrixScaling(0.05f, 0.05f, 0.05f) * Translation * Rotation ;
+	WVP = m_World1 * m_View * m_Projection;
+
+	cb.WVP = XMMatrixTranspose(WVP);
+	m_pImmediateContext->UpdateSubresource(m_pConstantBuffer, 0, NULL, &cb, 0, 0);
+
+	m_pImmediateContext->VSSetShader(m_pVertexShader, NULL, 0);
+	m_pImmediateContext->VSSetConstantBuffers(0, 1, &m_pConstantBuffer);
+	m_pImmediateContext->PSSetShader(m_pPixelShader, NULL, 0);
+	m_pImmediateContext->PSSetShaderResources(0, 1, &m_pTextureRV);
+	m_pImmediateContext->PSSetSamplers(0, 1, &m_pSamplerLinear);
+	m_pImmediateContext->DrawIndexed(36, 0, 0);
+
+	//// 2 планета
+
+
+	
+	
+
+	rotaxis = XMVectorSet(0.5f, 0.3f, 0.0f, 0.0f);
+	Translation = XMMatrixTranslation(2.0f, 1.0, 4.0f);
+	Rotation = XMMatrixRotationAxis(rotaxis, m_rot);
+
+
+	m_World_sputnik = Translation * Rotation * XMMatrixScaling(0.3f, 0.3f, 0.3f);
+	rotaxis = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+	Rotation = XMMatrixRotationAxis(rotaxis, m_rot);
+	m_World1 = XMMatrixScaling(0.6f, 0.6f, 0.6f)* Translation  * Rotation * XMMatrixScaling(0.3f, 0.3f, 0.3f) ;
+	
+	WVP = m_World1 * m_View * m_Projection;
+
+	cb.WVP = XMMatrixTranspose(WVP);
+	m_pImmediateContext->UpdateSubresource(m_pConstantBuffer, 0, NULL, &cb, 0, 0);
+
+	m_pImmediateContext->VSSetShader(m_pVertexShader, NULL, 0);
+	m_pImmediateContext->VSSetConstantBuffers(0, 1, &m_pConstantBuffer);
+	m_pImmediateContext->PSSetShader(m_pPixelShader, NULL, 0);
+	m_pImmediateContext->PSSetShaderResources(0, 1, &m_pTextureRV);
+	m_pImmediateContext->PSSetSamplers(0, 1, &m_pSamplerLinear);
+	m_pImmediateContext->DrawIndexed(36, 0, 0);
+	
+	// 2 спутник
+	
+	m_World_sputnik *= Translation * Rotation * XMMatrixScaling(0.3f, 0.3f, 0.3f);
+	WVP = m_World_sputnik * m_View * m_Projection;
+	m_World_sputnik *= Rotation;
+	cb.WVP = XMMatrixTranspose(WVP);
+	m_pImmediateContext->UpdateSubresource(m_pConstantBuffer, 0, NULL, &cb, 0, 0);
+
+	m_pImmediateContext->VSSetShader(m_pVertexShader, NULL, 0);
+	m_pImmediateContext->VSSetConstantBuffers(0, 1, &m_pConstantBuffer);
+	m_pImmediateContext->PSSetShader(m_pPixelShader, NULL, 0);
+	m_pImmediateContext->PSSetShaderResources(0, 1, &m_pTextureRV);
+	m_pImmediateContext->PSSetSamplers(0, 1, &m_pSamplerLinear);
+	m_pImmediateContext->DrawIndexed(36, 0, 0);
+
+
+	//// 3 планета
+	m_rot2 += .0003f;
+	if (m_rot2 > 6.26f)
+		m_rot2 = 0.0f;
+
+
+
+
+	rotaxis = XMVectorSet(0.0f,1.0f, -0.5f, 0.0f);
+	Translation = XMMatrixTranslation(6.0f, 2.0, 7.0f);
+	Rotation = XMMatrixRotationAxis(rotaxis, m_rot2);
+
+
+	m_World_sputnik = Translation * Rotation * XMMatrixScaling(0.3f, 0.3f, 0.3f);
+	rotaxis = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+	Rotation = XMMatrixRotationAxis(rotaxis, m_rot2);
+	m_World1 = XMMatrixScaling(0.5f, 0.5f, 0.5f) * Translation * Rotation * XMMatrixScaling(0.3f, 0.3f, 0.3f);
+
+	WVP = m_World1 * m_View * m_Projection;
+
+	cb.WVP = XMMatrixTranspose(WVP);
+	m_pImmediateContext->UpdateSubresource(m_pConstantBuffer, 0, NULL, &cb, 0, 0);
+
+	m_pImmediateContext->VSSetShader(m_pVertexShader, NULL, 0);
+	m_pImmediateContext->VSSetConstantBuffers(0, 1, &m_pConstantBuffer);
+	m_pImmediateContext->PSSetShader(m_pPixelShader, NULL, 0);
+	m_pImmediateContext->PSSetShaderResources(0, 1, &m_pTextureRV);
+	m_pImmediateContext->PSSetSamplers(0, 1, &m_pSamplerLinear);
+	m_pImmediateContext->DrawIndexed(36, 0, 0);
+
+	// 3 спутник
+
+	m_World_sputnik *= Translation * Rotation * XMMatrixScaling(0.3f, 0.3f, 0.3f);
+	WVP = m_World_sputnik * m_View * m_Projection;
+	m_World_sputnik *= Rotation;
+	cb.WVP = XMMatrixTranspose(WVP);
+	m_pImmediateContext->UpdateSubresource(m_pConstantBuffer, 0, NULL, &cb, 0, 0);
+
+	m_pImmediateContext->VSSetShader(m_pVertexShader, NULL, 0);
+	m_pImmediateContext->VSSetConstantBuffers(0, 1, &m_pConstantBuffer);
+	m_pImmediateContext->PSSetShader(m_pPixelShader, NULL, 0);
+	m_pImmediateContext->PSSetShaderResources(0, 1, &m_pTextureRV);
+	m_pImmediateContext->PSSetSamplers(0, 1, &m_pSamplerLinear);
+	m_pImmediateContext->DrawIndexed(36, 0, 0);
+
+
+	//// 4 планета
+	m_rot3 += .0003f;
+	if (m_rot3 > 6.26f)
+		m_rot3 = 0.0f;
+
+
+
+
+	rotaxis = XMVectorSet(0.0f, 0.0f, -0.5f, 0.0f);
+	Translation = XMMatrixTranslation(12.0f, -5.0f, 0.0f);
+	Rotation = XMMatrixRotationAxis(rotaxis, m_rot3);
+
+
+	m_World_sputnik = Translation * Rotation * XMMatrixScaling(0.3f, 0.3f, 0.3f);
+	rotaxis = XMVectorSet(0.1f, 0.2f, 0.0f, 0.0f);
+	Rotation = XMMatrixRotationAxis(rotaxis, m_rot3);
+	m_World1 = XMMatrixScaling(0.5f, 0.5f, 0.5f) * Translation * Rotation * XMMatrixScaling(0.3f, 0.3f, 0.3f);
+
+	WVP = m_World1 * m_View * m_Projection;
+
+	cb.WVP = XMMatrixTranspose(WVP);
+	m_pImmediateContext->UpdateSubresource(m_pConstantBuffer, 0, NULL, &cb, 0, 0);
+
+	m_pImmediateContext->VSSetShader(m_pVertexShader, NULL, 0);
+	m_pImmediateContext->VSSetConstantBuffers(0, 1, &m_pConstantBuffer);
+	m_pImmediateContext->PSSetShader(m_pPixelShader, NULL, 0);
+	m_pImmediateContext->PSSetShaderResources(0, 1, &m_pTextureRV);
+	m_pImmediateContext->PSSetSamplers(0, 1, &m_pSamplerLinear);
+	m_pImmediateContext->DrawIndexed(36, 0, 0);
+
+	// 4 спутник
+
+	m_World_sputnik *= Translation * Rotation * XMMatrixScaling(0.3f, 0.3f, 0.3f);
+	WVP = m_World_sputnik * m_View * m_Projection;
+	m_World_sputnik *= Rotation;
+	cb.WVP = XMMatrixTranspose(WVP);
+	m_pImmediateContext->UpdateSubresource(m_pConstantBuffer, 0, NULL, &cb, 0, 0);
+
+	m_pImmediateContext->VSSetShader(m_pVertexShader, NULL, 0);
+	m_pImmediateContext->VSSetConstantBuffers(0, 1, &m_pConstantBuffer);
+	m_pImmediateContext->PSSetShader(m_pPixelShader, NULL, 0);
+	m_pImmediateContext->PSSetShaderResources(0, 1, &m_pTextureRV);
+	m_pImmediateContext->PSSetSamplers(0, 1, &m_pSamplerLinear);
+	m_pImmediateContext->DrawIndexed(36, 0, 0);
+
+
+
+	//// 5 планета
+	m_rot4 += .001f;
+	if (m_rot4 > 6.26f)
+		m_rot4 = 0.0f;
+
+
+
+
+	rotaxis = XMVectorSet(-0.8f, -0.9f, -0.3f, 0.0f);
+	Translation = XMMatrixTranslation(16.0f, -3.0f, -2.0f);
+	Rotation = XMMatrixRotationAxis(rotaxis, m_rot3);
+
+
+	m_World_sputnik = Translation * Rotation * XMMatrixScaling(0.1f, 0.1f, 0.1f);
+	rotaxis = XMVectorSet(-0.1f,0.2f, 0.1f, 0.0f);
+	Rotation = XMMatrixRotationAxis(rotaxis, m_rot3);
+	m_World1 = XMMatrixScaling(0.9f, 0.9f, 0.9f) * Translation * Rotation * XMMatrixScaling(0.3f, 0.3f, 0.3f);
+
+	WVP = m_World1 * m_View * m_Projection;
+
+	cb.WVP = XMMatrixTranspose(WVP);
+	m_pImmediateContext->UpdateSubresource(m_pConstantBuffer, 0, NULL, &cb, 0, 0);
+
+	m_pImmediateContext->VSSetShader(m_pVertexShader, NULL, 0);
+	m_pImmediateContext->VSSetConstantBuffers(0, 1, &m_pConstantBuffer);
+	m_pImmediateContext->PSSetShader(m_pPixelShader, NULL, 0);
+	m_pImmediateContext->PSSetShaderResources(0, 1, &m_pTextureRV);
+	m_pImmediateContext->PSSetSamplers(0, 1, &m_pSamplerLinear);
+	m_pImmediateContext->DrawIndexed(36, 0, 0);
+
+	// 5 спутник
+
+	m_World_sputnik *= XMMatrixScaling(2.3f, 2.3f, 2.3f)*Translation * Rotation * XMMatrixScaling(0.3f, 0.3f, 0.3f);
+	WVP = m_World_sputnik * m_View * m_Projection;
+	m_World_sputnik *= Rotation;
+	cb.WVP = XMMatrixTranspose(WVP);
+	m_pImmediateContext->UpdateSubresource(m_pConstantBuffer, 0, NULL, &cb, 0, 0);
+
+	m_pImmediateContext->VSSetShader(m_pVertexShader, NULL, 0);
+	m_pImmediateContext->VSSetConstantBuffers(0, 1, &m_pConstantBuffer);
+	m_pImmediateContext->PSSetShader(m_pPixelShader, NULL, 0);
+	m_pImmediateContext->PSSetShaderResources(0, 1, &m_pTextureRV);
+	m_pImmediateContext->PSSetSamplers(0, 1, &m_pSamplerLinear);
+	m_pImmediateContext->DrawIndexed(36, 0, 0);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	//////3 планета
+	//rotaxis = XMVectorSet(-0.1f, 1.0f, 0.0f, 0.0f);
+	//m_rot1 += .0009f;
+	//if (m_rot1 > 6.26f)
+	//	m_rot1 = 0.0f;
+	//
+	//Rotation = XMMatrixRotationAxis(rotaxis, m_rot1);
+	//Translation = XMMatrixTranslation(4.0f, -2.0f, 8.0f);
+	//m_World1 = Translation * Rotation * Scale;
+	//WVP = m_World1 * m_View * m_Projection;
+
+	//cb.WVP = XMMatrixTranspose(WVP);
+	//m_pImmediateContext->UpdateSubresource(m_pConstantBuffer, 0, NULL, &cb, 0, 0);
+
+	//m_pImmediateContext->VSSetShader(m_pVertexShader, NULL, 0);
+	//m_pImmediateContext->VSSetConstantBuffers(0, 1, &m_pConstantBuffer);
+	//m_pImmediateContext->PSSetShader(m_pPixelShader, NULL, 0);
+	//m_pImmediateContext->PSSetShaderResources(0, 1, &m_pTextureRV);
+	//m_pImmediateContext->PSSetSamplers(0, 1, &m_pSamplerLinear);
+	//m_pImmediateContext->DrawIndexed(36, 0, 0);
+
+	//////4 планета
+	//rotaxis = XMVectorSet(0.2f, 1.0f, 0.3f, 0.0f);
+	//m_rot2 += .0003f;
+	//if (m_rot2 > 6.26f)
+	//	m_rot2 = 0.0f;
+	//Rotation = XMMatrixRotationAxis(rotaxis, m_rot2);
+	//Translation = XMMatrixTranslation(2.0f, 0.0f,10.0f);
+	// m_World1 = Translation * Rotation * Scale;
+	//WVP = m_World1 * m_View * m_Projection;
+
+	//cb.WVP = XMMatrixTranspose(WVP);
+	//m_pImmediateContext->UpdateSubresource(m_pConstantBuffer, 0, NULL, &cb, 0, 0);
+
+	//m_pImmediateContext->VSSetShader(m_pVertexShader, NULL, 0);
+	//m_pImmediateContext->VSSetConstantBuffers(0, 1, &m_pConstantBuffer);
+	//m_pImmediateContext->PSSetShader(m_pPixelShader, NULL, 0);
+	//m_pImmediateContext->PSSetShaderResources(0, 1, &m_pTextureRV);
+	//m_pImmediateContext->PSSetSamplers(0, 1, &m_pSamplerLinear);
+	//m_pImmediateContext->DrawIndexed(36, 0, 0);
+
+	//////5 планета
+	//
+
+	//rotaxis = XMVectorSet(0.1f, 1.0f, 0.0f, 0.0f);
+	//Rotation = XMMatrixRotationAxis(rotaxis, m_rot);
+
+	//Translation = XMMatrixTranslation(5.0f, 4.0f, 14.0f);
+	//m_World1 = Translation * Rotation * Scale;
+	//WVP = m_World1 * m_View * m_Projection;
+
+	//cb.WVP = XMMatrixTranspose(WVP);
+	//m_pImmediateContext->UpdateSubresource(m_pConstantBuffer, 0, NULL, &cb, 0, 0);
+
+	//m_pImmediateContext->VSSetShader(m_pVertexShader, NULL, 0);
+	//m_pImmediateContext->VSSetConstantBuffers(0, 1, &m_pConstantBuffer);
+	//m_pImmediateContext->PSSetShader(m_pPixelShader, NULL, 0);
+	//m_pImmediateContext->PSSetShaderResources(0, 1, &m_pTextureRV);
+	//m_pImmediateContext->PSSetSamplers(0, 1, &m_pSamplerLinear);
+	//m_pImmediateContext->DrawIndexed(36, 0, 0);
+
+
+
+}
+
+
