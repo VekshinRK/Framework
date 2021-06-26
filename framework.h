@@ -6,7 +6,12 @@
 
 namespace D3D11Framework
 {
-	//------------------------------------------------------------------
+	
+	struct FrameworkDesc
+	{
+		DescWindow wnd;
+		Render* render;
+	};
 
 	class Framework
 	{
@@ -14,7 +19,7 @@ namespace D3D11Framework
 		Framework();
 		~Framework();
 
-		bool Init();
+		bool Init(const FrameworkDesc& desc);
 		void Run();
 		void Close();
 
@@ -23,6 +28,7 @@ namespace D3D11Framework
 	protected:
 		bool m_frame();
 
+		FrameworkDesc m_desc;
 		Window* m_wnd;
 		Render* m_render;
 		InputMgr* m_input;
@@ -30,5 +36,5 @@ namespace D3D11Framework
 		bool m_init;		// если было инициализировано
 	};
 
-	//------------------------------------------------------------------
+	
 }

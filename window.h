@@ -8,6 +8,7 @@
 
 namespace D3D11Framework
 {
+	//------------------------------------------------------------------
 
 	class InputMgr;
 
@@ -47,7 +48,7 @@ namespace D3D11Framework
 		void Close();
 
 		void SetInputMgr(InputMgr* inputmgr);
-
+		
 		HWND GetHWND() const { return m_hwnd; }
 		int GetLeft() const { return m_desc.posx; }
 		int GetTop() const { return m_desc.posy; }
@@ -89,5 +90,5 @@ namespace D3D11Framework
 	// обработка событий
 	static LRESULT CALLBACK StaticWndProc(HWND hwnd, UINT nMsg, WPARAM wParam, LPARAM lParam);
 
-	
+	//------------------------------------------------------------------
 }

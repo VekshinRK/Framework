@@ -1,5 +1,6 @@
 #include "D3D11_Framework.h"
-
+#include"Textures.h"
+#include"Light.h"
 using namespace D3D11Framework;
 
 class MyInput : public InputListener
@@ -18,22 +19,33 @@ public:
 };
 
 
-
-
 int main()
 {
-	Framework framework;
+	{Framework framework;
 
-	Render* render = new Render();
+	Textures* render = new Textures();
+	FrameworkDesc desc;
+	desc.render = render;
 
-	framework.SetRender(render);
-	framework.Init();
+	framework.Init(desc);
 
 	framework.Run();
 
-	framework.Close();
+	framework.Close(); }
 
-	return 0;
+	/*{Framework framework;
 
+	Light* render = new Light();
+
+	FrameworkDesc desc;
+	desc.render = render;
+
+	framework.Init(desc);
+
+	framework.Run();
+
+	framework.Close(); }*/
+
+	system("pause");
 	return 0;
 }

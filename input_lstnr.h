@@ -20,7 +20,7 @@ namespace D3D11Framework
 	{
 		MouseEventClick(eMouseKeyCodes b, int nx, int ny) : MouseEvent(nx, ny), btn(b) {}
 
-		const eMouseKeyCodes btn;	// Клавиша
+		const eMouseKeyCodes btn;	
 	};
 
 	// событие прокрутки мыши
@@ -43,7 +43,7 @@ namespace D3D11Framework
 	class InputListener
 	{
 	public:
-		// если методы возращают true - событие больше никем не обрабатывается
+	
 
 		// кнопка нажата
 		virtual bool MousePressed(const MouseEventClick& arg) { return false; }

@@ -1,0 +1,5 @@
+C:\Users\123\Desktop\graphic\cg_it_10\Framework\Debug\Framework.vcxproj.CopyComplete
+C:\Users\123\Desktop\graphic\cg_it_10\Framework\Debug\Framework.exe
+C:\Users\123\Desktop\graphic\cg_it_10\Framework\Debug\xapobaseredist.pdb
+C:\Users\123\Desktop\graphic\cg_it_10\Framework\Debug\xaudio2_9redist.pdb
+C:\Users\123\Desktop\graphic\cg_it_10\Framework\Debug\xaudio2_9redist.dll

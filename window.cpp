@@ -5,7 +5,7 @@
 
 namespace D3D11Framework
 {
-
+	//------------------------------------------------------------------
 
 	Window* Window::m_wndthis = nullptr;
 
@@ -178,5 +178,5 @@ namespace D3D11Framework
 		return Window::Get()->WndProc(hwnd, nMsg, wParam, lParam);
 	}
 
-
+	//------------------------------------------------------------------
 }

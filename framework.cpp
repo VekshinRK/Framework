@@ -32,8 +32,9 @@ namespace D3D11Framework
 			while (m_frame());
 	}
 
-	bool Framework::Init()
+	bool Framework::Init(const FrameworkDesc& desc)
 	{
+		m_render = desc.render;
 		m_wnd = new Window();
 		m_input = new InputMgr();
 
@@ -46,15 +47,14 @@ namespace D3D11Framework
 		m_input->Init();
 
 		// Создаем значения настроек по умолчанию. В одном из будущих уроков мы вернемся к этому
-		DescWindow desc;
-		if (!m_wnd->Create(desc))
+		if (!m_wnd->Create(desc.wnd))
 		{
 			Log::Get()->Err("Не удалось создать окно");
 			return false;
 		}
 		m_wnd->SetInputMgr(m_input);
 
-		if (!m_render->Init(m_wnd->GetHWND()))
+		if (!m_render->CreateDevice(m_wnd->GetHWND()))
 		{
 			Log::Get()->Err("Не удалось создать рендер");
 			return false;
@@ -81,8 +81,10 @@ namespace D3D11Framework
 		{
 		}
 
+		m_render->BeginFrame();
 		if (!m_render->Draw())
 			return false;
+		m_render->EndFrame();
 
 		return true;
 	}
@@ -90,7 +92,8 @@ namespace D3D11Framework
 	void Framework::Close()
 	{
 		m_init = false;
-		_CLOSE(m_render);
+		m_render->Shutdown();
+		_DELETE(m_render);
 		_CLOSE(m_wnd);
 		_CLOSE(m_input);
 	}
